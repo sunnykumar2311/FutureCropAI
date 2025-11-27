@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Future Crop AI • Price Predictor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="./price_style.css" />
+  <script defer src="./price_app.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <h1>Future Crop AI</h1>
+      <span class="tag">Green • Accurate • Fast</span>
+    </div>
+    <div class="header-actions">
+      <span id="apiStatus" class="status-pill">API: checking…</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">Predict Next-Day Modal Price</h2>
+
+      <div class="grid-3">
+        <!-- Commodity -->
+        <div class="form-group">
+          <label for="commodity">Commodity <span class="req">*</span></label>
+          <select id="commodity" aria-label="Select commodity">
+            <option value="">Loading models…</option>
+          </select>
+          <small id="modelCount" class="muted"></small>
+        </div>
+
+        <!-- State (SELECT now) -->
+        <div class="form-group">
+          <label for="state">State <span class="req">*</span></label>
+          <select id="state" disabled>
+            <option value="">Select commodity first…</option>
+          </select>
+          <small class="muted">Choose a valid state from the list.</small>
+        </div>
+
+        <!-- Market (SELECT now) -->
+        <div class="form-group">
+          <label for="market">Market <span class="req">*</span></label>
+          <select id="market" disabled>
+            <option value="">Select state first…</option>
+          </select>
+          <small class="muted">Auto-fills after selecting a state.</small>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="predDate">Predict for date</label>
+          <input id="predDate" type="date" />
+          <small class="muted">Optional — empty means today.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Window / Data</label>
+          <div class="pill-row">
+            <span class="pill" id="windowSize">win: —</span>
+            <span class="pill" id="usedPoints">used: —</span>
+            <span class="pill" id="paddedFlag">padded: —</span>
+          </div>
+        </div>
+
+        <div class="form-group actions">
+          <button id="predictBtn" class="primary-btn">Predict</button>
+          <button id="clearBtn" class="ghost-btn">Clear</button>
+        </div>
+      </div>
+
+      <div id="result" class="result hide" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Trend</h2>
+      <canvas id="priceChart" height="340"></canvas>
+      <div class="legend">
+        <div class="leg-item"><span class="dot dot-series"></span> Recent prices</div>
+        <div class="leg-item"><span class="dot dot-pred"></span> Predicted next</div>
+        <div id="chartNote" class="muted"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toaster" class="toaster" aria-live="assertive" aria-atomic="true"></div>
+
+  <footer class="app-footer">
+    <span>©️ 2025 Future Crop AI</span>
+    <span class="sep">•</span>
+    <a class="link" href="#">Privacy</a>
+  </footer>
+</body>
+</html>
