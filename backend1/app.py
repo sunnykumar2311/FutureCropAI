@@ -36,6 +36,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# 👇 ADD THIS BLOCK
+@app.get("/")
+def root():
+    return {
+        "message": "Future Crop AI backend is running 🚀",
+        "docs": "/docs",
+        "health": "/health",
+    }
+# 👆 ADD THIS BLOCK
 
 # ---------- Helpers ----------
 def _connect() -> sqlite3.Connection:
