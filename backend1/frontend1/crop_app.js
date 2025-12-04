@@ -1,6 +1,4 @@
-// frontend1/crop_app.js
-
-const API_BASE = "http://127.0.0.1:8010";
+// frontend1/crop_app
 
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
