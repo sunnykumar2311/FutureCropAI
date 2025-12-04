@@ -1,0 +1,126 @@
+/* GLOBAL */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #eaffea, #ffffff);
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #009b37;
+}
+
+.nav a {
+    margin-left: 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+.nav a.active,
+.nav a:hover {
+    background: #009b37;
+    color: white;
+}
+
+/* HERO SECTION */
+.hero {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.hero h2 {
+    font-size: 36px;
+    color: #00772a;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #444;
+    margin-top: 10px;
+}
+
+.cta-buttons {
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 14px 25px;
+    margin: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.btn.primary {
+    background: #009b37;
+    color: white;
+}
+
+.btn.secondary {
+    background: white;
+    border: 2px solid #009b37;
+    color: #009b37;
+}
+
+.btn.primary:hover,
+.btn.secondary:hover {
+    background: #007f2d;
+    color: white;
+}
+
+/* FEATURE CARDS */
+.features {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+}
+
+.glass-card {
+    width: 300px;
+    padding: 25px;
+    margin: 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.45);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    backdrop-filter: blur(12px);
+    text-align: center;
+}
+
+.glass-card h3 {
+    color: #006622;
+}
+
+.btn.small {
+    padding: 10px 20px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.disabled {
+    background: gray !important;
+    pointer-events: none;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    background: white;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+}

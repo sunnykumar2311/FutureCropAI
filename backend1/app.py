@@ -12,6 +12,21 @@ BASE_DIR   = os.path.dirname(__file__)
 DB_PATH    = os.path.join(BASE_DIR, "data", "prices.db")
 MODELS_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "models"))
 
+# Path for crop recommendation model (trained via crop_reco/train_crop_model.py)
+CROP_MODEL_PATH = os.path.join(BASE_DIR, "crop_reco", "model.pkl")
+
+# ---------- Load Crop Recommendation Model ----------
+try:
+    _crop_bundle = joblib.load(CROP_MODEL_PATH)
+    CROP_MODEL = _crop_bundle.get("model", _crop_bundle)
+    CROP_FEATURES = _crop_bundle.get("features", [])
+    print(f"✅ Loaded crop recommendation model from {CROP_MODEL_PATH}")
+    print(f"   Features: {CROP_FEATURES}")
+except Exception as e:
+    CROP_MODEL = None
+    CROP_FEATURES = []
+    print(f"⚠️ Failed to load crop model from {CROP_MODEL_PATH}: {e}")
+
 # ---------- App ----------
 app = FastAPI(title="Future Crop AI", version="2.0")
 app.add_middleware(
@@ -46,7 +61,9 @@ def _list_models_from_dir() -> List[str]:
 
 def _list_models_from_db() -> List[str]:
     con = _connect()
-    rows = [r[0] for r in con.execute("SELECT DISTINCT commodity FROM prices ORDER BY commodity").fetchall()]
+    rows = [r[0] for r in con.execute(
+        "SELECT DISTINCT commodity FROM prices ORDER BY commodity"
+    ).fetchall()]
     con.close()
     return rows
 
@@ -133,10 +150,26 @@ class PredictOut(BaseModel):
     padded: bool
     predicted_next_price: float
 
+# Crop recommendation input
+class CropIn(BaseModel):
+    N: float
+    P: float
+    K: float
+    temperature: float
+    humidity: float
+    ph: float
+    rainfall: float
+
 # ---------- Routes ----------
 @app.get("/health")
 def health():
-    return {"ok": True, "db": os.path.exists(DB_PATH), "models_dir": os.path.isdir(MODELS_DIR)}
+    return {
+        "ok": True,
+        "db": os.path.exists(DB_PATH),
+        "models_dir": os.path.isdir(MODELS_DIR),
+        "crop_model_loaded": CROP_MODEL is not None,
+        "crop_features": CROP_FEATURES,
+    }
 
 @app.get("/models")
 def models():
@@ -227,7 +260,10 @@ def predict_by_context(inp: PredictCtxIn):
     # fetch history
     series = _fetch_modal_series(inp.commodity, inp.state, inp.market, cutoff_iso, need)
     if not series:
-        raise HTTPException(422, f"No price history for {inp.commodity} in {inp.market}, {inp.state}.")
+        raise HTTPException(
+            422,
+            f"No price history for {inp.commodity} in {inp.market}, {inp.state}."
+        )
 
     # pad if short
     min_required = int(os.environ.get("MIN_REQUIRED", "3"))
@@ -236,8 +272,11 @@ def predict_by_context(inp: PredictCtxIn):
     fixed = _ensure_length(series, need, min_required=min_required, strategy=strategy)
     if fixed is None:
         have = len(series)
-        raise HTTPException(422, f"Not enough history for {inp.commodity} in {inp.market}, {inp.state}. "
-                                 f"Have {have}, need {need} (min_required={min_required}).")
+        raise HTTPException(
+            422,
+            f"Not enough history for {inp.commodity} in {inp.market}, {inp.state}. "
+            f"Have {have}, need {need} (min_required={min_required})."
+        )
     if len(series) < need:
         padded = True
 
@@ -256,6 +295,85 @@ def predict_by_context(inp: PredictCtxIn):
         padded=padded,
         predicted_next_price=round(yhat, 2),
     )
+
+# ---------- Crop Recommendation Endpoint ----------
+@app.post("/crop/recommend")
+def recommend_crop(inp: CropIn):
+    """
+    Use the trained crop recommendation model (RandomForest in crop_reco/model.pkl)
+    to predict the best crop + top alternatives.
+    """
+    if CROP_MODEL is None or not CROP_FEATURES:
+        raise HTTPException(
+            status_code=500,
+            detail="Crop model is not loaded on the server."
+        )
+
+    feat_dict = {
+        "N": inp.N,
+        "P": inp.P,
+        "K": inp.K,
+        "temperature": inp.temperature,
+        "humidity": inp.humidity,
+        "ph": inp.ph,
+        "rainfall": inp.rainfall,
+    }
+
+    # Build feature vector in the order used during training
+    try:
+        row = [feat_dict[name] for name in CROP_FEATURES]
+    except KeyError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Crop model expects feature {e} which is missing from input."
+        )
+
+    X = np.array([row], dtype=float)
+
+    try:
+        probs = CROP_MODEL.predict_proba(X)[0]
+        classes = CROP_MODEL.classes_
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Crop model prediction failed: {e}")
+
+    order = np.argsort(probs)[::-1]
+
+    best_idx = int(order[0])
+    best_crop = str(classes[best_idx])
+    best_prob = float(probs[best_idx])  # 0–1
+
+    # Build alternatives (top 3 minus primary)
+    alternatives = []
+    for idx in order[1:4]:
+        alternatives.append({
+            "crop": str(classes[int(idx)]),
+            "confidence": float(probs[int(idx)] * 100.0),
+        })
+
+    # Simple display-only metrics
+    if best_prob >= 0.75:
+        suitability = "Excellent"
+        risk_label = "Low"
+    elif best_prob >= 0.55:
+        suitability = "Good"
+        risk_label = "Medium"
+    elif best_prob >= 0.4:
+        suitability = "Fair"
+        risk_label = "Medium-High"
+    else:
+        suitability = "Low"
+        risk_label = "High"
+
+    growth_score = round(best_prob * 10.0, 1)  # 0–10 scale
+
+    return {
+        "recommended_crop": best_crop,
+        "confidence": round(best_prob * 100.0, 1),  # %
+        "suitability": suitability,
+        "growth_score": growth_score,
+        "risk_label": risk_label,
+        "alternatives": alternatives,
+    }
 
 # --------- Dev tip ----------
 # uvicorn command to run:

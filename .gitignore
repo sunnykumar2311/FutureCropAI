@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Model files (optional — remove if you WANT to upload them)
+*.joblib
+*.pkl
+
+# Logs
+*.log
+
+# Cache folders
+.cache/

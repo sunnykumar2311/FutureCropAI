@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Future Crop AI | Crop Recommendation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="crop_style.css" />
+  <script defer src="crop_app.js"></script>
+</head>
+<body>
+  <header class="fc-header">
+    <div class="fc-header-left">
+      <span class="fc-logo-dot"></span>
+      <span class="fc-logo-text">Future Crop AI</span>
+    </div>
+    <nav class="fc-nav">
+      <a href="index.html" class="fc-nav-link">Home</a>
+      <a href="price_index.html" class="fc-nav-link">Price Prediction</a>
+      <a href="crop_index.html" class="fc-nav-link fc-nav-link--active">Crop Recommendation</a>
+    </nav>
+    <div class="fc-header-right">
+      <button class="btn-mini" onclick="window.location.href='price_index.html'">
+        Go to Price Prediction
+      </button>
+    </div>
+  </header>
+
+  <main class="fc-main">
+    <div class="fc-main-top">
+      <a href="index.html" class="pill-btn pill-btn--ghost">
+        ← Back to Dashboard
+      </a>
+      <h1 class="page-title">Crop Recommendation</h1>
+      <p class="page-subtitle">
+        Enter soil nutrients and climate conditions to get AI-based crop suggestions.
+      </p>
+    </div>
+
+    <section class="fc-layout">
+      <!-- Left: form -->
+      <div class="card form-card">
+        <h2 class="card-title">Input Parameters</h2>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="N">Nitrogen (N)</label>
+            <input id="N" type="number" class="input" placeholder="0–140" />
+            <small class="muted">Typical: 0–140 kg/ha</small>
+          </div>
+
+          <div class="form-row">
+            <label for="P">Phosphorus (P)</label>
+            <input id="P" type="number" class="input" placeholder="5–145" />
+            <small class="muted">Typical: 5–145 kg/ha</small>
+          </div>
+
+          <div class="form-row">
+            <label for="K">Potassium (K)</label>
+            <input id="K" type="number" class="input" placeholder="5–205" />
+            <small class="muted">Typical: 5–205 kg/ha</small>
+          </div>
+
+          <div class="form-row">
+            <label for="temperature">Temperature (°C)</label>
+            <input id="temperature" type="number" class="input" placeholder="0–50" />
+            <small class="muted">In degrees Celsius</small>
+          </div>
+
+          <div class="form-row">
+            <label for="humidity">Humidity (%)</label>
+            <input id="humidity" type="number" class="input" placeholder="0–100" />
+            <small class="muted">Relative humidity</small>
+          </div>
+
+          <div class="form-row">
+            <label for="ph">Soil pH</label>
+            <input id="ph" type="number" step="0.1" class="input" placeholder="0–14" />
+            <small class="muted">Neutral soil is around 7.0</small>
+          </div>
+
+          <div class="form-row">
+            <label for="rainfall">Rainfall (mm)</label>
+            <input id="rainfall" type="number" class="input" placeholder="0–300" />
+            <small class="muted">Average seasonal rainfall</small>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="cr-recoBtn" class="btn btn--primary">
+            Recommend Crop
+          </button>
+          <button id="cr-clearBtn" class="btn btn--ghost">
+            Clear
+          </button>
+        </div>
+
+        <p class="muted tip">
+          Tip: Use values from recent soil test reports and local weather data
+          for best recommendations.
+        </p>
+      </div>
+
+      <!-- Right: results -->
+      <div class="card result-card">
+        <h2 class="card-title">Recommendation Result</h2>
+
+        <div id="cr-mainResult" class="main-result">
+          <p class="placeholder">
+            Results will appear here after you click <strong>Recommend Crop</strong>.
+          </p>
+        </div>
+
+        <div id="cr-metrics" class="metrics hidden">
+          <div class="metric">
+            <span class="metric-label">Confidence</span>
+            <span id="cr-confidence" class="metric-value">—</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Suitability</span>
+            <span id="cr-suitability" class="metric-value">—</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Growth Score</span>
+            <span id="cr-growth" class="metric-value">—</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Risk</span>
+            <span id="cr-risk" class="metric-value">—</span>
+          </div>
+        </div>
+
+        <div id="cr-alternatives" class="alt-list hidden">
+          <h3 class="alt-title">Top Alternative Crops</h3>
+          <ul id="cr-altList"></ul>
+        </div>
+
+        <div class="input-summary">
+          <h3 class="summary-title">Your Input Snapshot</h3>
+          <p id="cr-inputSummary" class="summary-text">—</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast toast--hidden"></div>
+
+  <footer class="fc-footer">
+    © 2025 Future Crop AI — Crop Recommendation Module
+  </footer>
+</body>
+</html>

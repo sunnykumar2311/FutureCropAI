@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Future Crop AI | Price Prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="price_style.css" />
+
+  <!-- Chart.js for graph -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- App JS -->
+  <script defer src="price_app.js"></script>
+</head>
+<body>
+  <!-- Global header / nav -->
+  <header class="fc-header">
+    <div class="fc-header-left">
+      <span class="fc-logo-dot"></span>
+      <span class="fc-logo-text">Future Crop AI</span>
+    </div>
+    <nav class="fc-nav">
+      <a href="index.html" class="fc-nav-link">Home</a>
+      <a href="price_index.html" class="fc-nav-link fc-nav-link--active">Price Prediction</a>
+      <a href="crop_index.html" class="fc-nav-link">Crop Recommendation</a>
+    </nav>
+    <div class="fc-header-right">
+      <span id="apiStatus" class="api-status api-status--checking">API: checking…</span>
+    </div>
+  </header>
+
+  <main class="fc-main">
+    <div class="fc-main-top">
+      <a href="index.html" class="pill-btn pill-btn--ghost">
+        ← Back to Dashboard
+      </a>
+      <h1 class="page-title">Crop Price Prediction</h1>
+      <p class="page-subtitle">
+        Predict next-day modal price for a selected commodity, state and market,
+        and view recent price trends.
+      </p>
+    </div>
+
+    <section class="fc-layout">
+      <!-- Left: form -->
+      <div class="card form-card">
+        <h2 class="card-title">Input Parameters</h2>
+
+        <div class="form-row">
+          <label for="pp-commodity">Commodity <span class="req">*</span></label>
+          <select id="pp-commodity" class="input" required>
+            <option value="">Loading commodities…</option>
+          </select>
+          <small id="pp-modelInfo" class="muted"></small>
+        </div>
+
+        <div class="form-row">
+          <label for="pp-state">State <span class="req">*</span></label>
+          <select id="pp-state" class="input" disabled>
+            <option value="">Select commodity first…</option>
+          </select>
+          <small class="muted">Choose a valid state from the list.</small>
+        </div>
+
+        <div class="form-row">
+          <label for="pp-market">Market <span class="req">*</span></label>
+          <select id="pp-market" class="input" disabled>
+            <option value="">Select state first…</option>
+          </select>
+          <small class="muted">Choose a valid market for the selected state.</small>
+        </div>
+
+        <div class="form-row">
+          <label for="pp-date">Predict for Date (optional)</label>
+          <input id="pp-date" type="date" class="input" />
+          <small class="muted">
+            If empty, the model uses the latest date available in the database.
+          </small>
+        </div>
+
+        <div class="form-row-inline">
+          <div class="chip-info">
+            <span class="chip-label">Window / Data</span>
+            <span id="chip-win"   class="chip-badge">win: —</span>
+            <span id="chip-used"  class="chip-badge">used: —</span>
+            <span id="chip-pad"   class="chip-badge">padded: —</span>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="pp-predictBtn" class="btn btn--primary">
+            Predict Price
+          </button>
+          <button id="pp-plotBtn" class="btn btn--secondary">
+            Plot History Only
+          </button>
+          <button id="pp-clearBtn" class="btn btn--ghost">
+            Clear
+          </button>
+        </div>
+
+        <div id="pp-predictionBox" class="prediction-box">
+          <h3 class="prediction-title">Prediction</h3>
+          <p id="pp-predictionText" class="prediction-text">
+            No prediction yet. Fill the form and click <strong>Predict Price</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: chart -->
+      <div class="card chart-card">
+        <div class="chart-header">
+          <div>
+            <h2 class="card-title">Recent Price Trend</h2>
+            <p class="muted">
+              Historical modal price and predicted next price for the chosen context.
+            </p>
+          </div>
+          <div class="legend">
+            <span class="legend-item">
+              <span class="legend-dot legend-dot--history"></span> History
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot legend-dot--pred"></span> Predicted next
+            </span>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <canvas id="pp-chart"></canvas>
+        </div>
+
+        <p id="pp-chartHint" class="muted chart-hint">
+          Select commodity, state and market, then click
+          <strong>Plot History Only</strong> or <strong>Predict Price</strong>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast / alerts -->
+  <div id="toast" class="toast toast--hidden"></div>
+
+  <footer class="fc-footer">
+    © 2025 Future Crop AI — Price Prediction Module
+  </footer>
+</body>
+</html>

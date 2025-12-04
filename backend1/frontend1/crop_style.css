@@ -1,0 +1,137 @@
+@import url("price_style.css");
+
+/* Reuse all base styles from price_style.css via import.
+   Add only crop-specific tweaks below. */
+
+.fc-header-right .btn-mini {
+  border-radius: var(--fc-radius-pill);
+  border: 1px solid var(--fc-border);
+  padding: 6px 12px;
+  background: #ffffff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.fc-header-right .btn-mini:hover {
+  background: #f0f7f1;
+  box-shadow: var(--fc-shadow-soft);
+}
+
+/* Layout tweaks */
+.fc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .fc-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) {
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.tip {
+  margin-top: 14px;
+  font-size: 0.85rem;
+}
+
+.result-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.main-result .placeholder {
+  margin: 8px 0 4px;
+  font-size: 0.9rem;
+  color: var(--fc-text-muted);
+}
+
+.main-result .recommended {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.main-result .recommended span {
+  font-weight: 700;
+  color: var(--fc-green);
+}
+
+/* Metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  font-size: 0.9rem;
+}
+
+.metric {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #f4faf4;
+  border: 1px solid var(--fc-border);
+}
+
+.metric-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--fc-text-muted);
+}
+
+.metric-value {
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Alternatives */
+.alt-title {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.alt-list ul,
+#cr-altList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#cr-altList li {
+  font-size: 0.9rem;
+  padding: 4px 0;
+}
+
+/* Input summary */
+.input-summary {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--fc-border);
+}
+
+.summary-title {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+}
+
+.summary-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fc-text-muted);
+}
