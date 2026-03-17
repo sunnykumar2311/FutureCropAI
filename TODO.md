@@ -1,15 +1,18 @@
-# TODO: Run Future Crop AI Website - COMPLETE ✅
+# Fix Render Deployment: Ensure Crop Model Loads in Production
 
-## Completed Steps:
+## Plan Summary
+- Create `backend/models/crop_model.pkl` (copy from `crop_reco/model.pkl`)
+- Edit `.gitignore` (unignore *.pkl/*.joblib)
+- Edit `backend/app.py` (update CROP_MODEL_PATH to \"models/crop_model.pkl\")
+- Git add/commit/push
+- Verify on Render: https://futurecropai-1.onrender.com/health
 
-- ✅ Step 1: Backend server started in backend1/venv at http://localhost:8010
-- ✅ Step 2: Opened dashboard: backend1/frontend1/index.html
+## Steps (to be checked off)
 
-## Status:
-Website running! Backend terminal active (CTRL+C to stop server). Use dashboard for crop/price apps.
+### 1. [✅] Create backend/models/ and copy model
+### 2. [✅] Edit .gitignore 
+### 3. [✅] Edit backend/app.py 
+### 4. [ ] Git status & add/commit/push
+### 5. [ ] Verify deployment
 
-**Backend Logs (excerpt):**
-```
-INFO:     Uvicorn running on http://127.0.0.1:8010 (Press CTRL+C to quit)
-```
-
+**Next:** Proceed to Step 1.

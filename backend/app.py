@@ -12,8 +12,8 @@ BASE_DIR   = os.path.dirname(__file__)
 DB_PATH    = os.path.join(BASE_DIR, "data", "prices.db")
 MODELS_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "models"))
 
-# Path for crop recommendation model (trained via crop_reco/train_crop_model.py)
-CROP_MODEL_PATH = os.path.join(BASE_DIR, "crop_reco", "model.pkl")
+# Path for crop recommendation model (for Render deployment)
+CROP_MODEL_PATH = os.path.join(BASE_DIR, "models", "crop_model.pkl")
 
 # ---------- Load Crop Recommendation Model ----------
 try:

@@ -14,9 +14,9 @@ env/
 # MacOS system files
 .DS_Store
 
-# Model files (optional — remove if you WANT to upload them)
-*.joblib
-*.pkl
+# Model files (REMOVED for Render deployment - *.joblib and *.pkl are now tracked)
+# *.joblib
+# *.pkl
 
 # Logs
 *.log
