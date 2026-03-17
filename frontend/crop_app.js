@@ -1,6 +1,8 @@
+const API_BASE = "https://futurecropai-1.onrender.com";
+
 // frontend1/crop_app
 
-function showToast(message, isError = false) {
+function showToast(message, isError = false) { {
   const toast = document.getElementById("toast");
   if (!toast) return;
   toast.textContent = message;

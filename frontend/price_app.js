@@ -1,6 +1,10 @@
 
 let priceChart = null;
 
+const API_BASE = "https://futurecropai-1.onrender.com";
+
+let priceChart = null;
+
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
   if (!toast) return;
